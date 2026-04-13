@@ -1,0 +1,23 @@
+dist:
+  name: claude-otel-collector
+  description: Custom OTel Collector for Claude telemetry
+  output_path: ./cmd/collector
+  otelcol_version: "0.115.0"
+
+extensions:
+  - gomod: go.opentelemetry.io/collector/extension/zpagesextension v0.115.0
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/extension/healthcheckextension v0.115.0
+
+receivers:
+  - gomod: go.opentelemetry.io/collector/receiver/otlpreceiver v0.115.0
+
+processors:
+  - gomod: go.opentelemetry.io/collector/processor/batchprocessor v0.115.0
+  - gomod: github.com/jaychinthrajah/claude-otel-collector/internal/claudeprocessor v0.0.0
+    path: ./internal/claudeprocessor
+  - gomod: github.com/jaychinthrajah/claude-otel-collector/internal/contentfilter v0.0.0
+    path: ./internal/contentfilter
+
+exporters:
+  - gomod: github.com/open-telemetry/opentelemetry-collector-contrib/exporter/datadogexporter v0.115.0
+  - gomod: go.opentelemetry.io/collector/exporter/debugexporter v0.115.0

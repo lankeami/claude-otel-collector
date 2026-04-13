@@ -10,10 +10,13 @@ install-ocb: ## Install OpenTelemetry Collector Builder
 	go install go.opentelemetry.io/collector/cmd/builder@v$(OCB_VERSION)
 	@mv $(GOPATH)/bin/builder $(GOPATH)/bin/ocb 2>/dev/null || true
 
-generate: ## Generate collector source from builder-config.yaml
-	$(OCB) --config builder-config.yaml
+generate: ## Generate collector source from builder-config.yaml (source only, no compile)
+	$(OCB) --skip-compilation --config builder-config.yaml
+	@# Fix module name so Go's internal package rule allows importing ./internal/*
+	@sed -i '' 's|^module go.opentelemetry.io/collector/cmd/builder|module github.com/jaychinthrajah/claude-otel-collector/cmd/collector|' cmd/collector/go.mod
 
 build: generate ## Build the collector binary
+	mkdir -p bin
 	cd cmd/collector && go build -o ../../bin/claude-otel-collector .
 
 test: ## Run all tests

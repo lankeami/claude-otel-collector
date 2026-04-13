@@ -1,0 +1,50 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 5s
+    send_batch_size: 1000
+  claude:
+    pricing:
+      claude-sonnet-4-20250514:
+        input_per_mtok: 3.00
+        output_per_mtok: 15.00
+      claude-opus-4-0-20250115:
+        input_per_mtok: 15.00
+        output_per_mtok: 75.00
+      claude-haiku-4-5-20251001:
+        input_per_mtok: 0.80
+        output_per_mtok: 4.00
+    team_mapping: {}
+  contentfilter/dd:
+    mode: strip
+
+exporters:
+  datadog:
+    api:
+      key: ${DD_API_KEY}
+      site: datadoghq.com
+  debug:
+    verbosity: detailed
+
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+
+service:
+  extensions: [health_check]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch, claude, contentfilter/dd]
+      exporters: [datadog, debug]
+    metrics:
+      receivers: [otlp]
+      processors: [batch, claude]
+      exporters: [datadog]

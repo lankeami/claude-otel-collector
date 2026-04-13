@@ -2,7 +2,6 @@ dist:
   name: claude-otel-collector
   description: Custom OTel Collector for Claude telemetry
   output_path: ./cmd/collector
-  otelcol_version: "0.115.0"
 
 extensions:
   - gomod: go.opentelemetry.io/collector/extension/zpagesextension v0.115.0

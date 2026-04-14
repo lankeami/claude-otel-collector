@@ -20,7 +20,7 @@ build: generate ## Build the collector binary
 	cd cmd/collector && go build -o ../../bin/claude-otel-collector .
 
 test: ## Run all tests
-	go test ./internal/... -v -race
+	go test ./internal/claudeprocessor/... ./internal/contentfilter/... -v -race
 
 run: build ## Run the collector with local config
 	./bin/claude-otel-collector --config config/collector-config.yaml

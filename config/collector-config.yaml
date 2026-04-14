@@ -46,5 +46,5 @@ service:
       exporters: [datadog, debug]
     metrics:
       receivers: [otlp]
-      processors: [batch, claude]
+      processors: [batch]
       exporters: [datadog]

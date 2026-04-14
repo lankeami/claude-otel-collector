@@ -125,7 +125,29 @@ Check the collector terminal — you should see the debug exporter output showin
 - `claude.team` set to `platform-team` (from the test config's team mapping)
 - `claude.content.prompt` stripped by the contentfilter
 
-### 7. Run with the production config (requires DataDog)
+### 7. Set up environment variables
+
+Copy the example `.env` file and add your keys:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with your actual values:
+
+```
+DD_API_KEY=your-datadog-api-key
+```
+
+> **Note:** `.env` is gitignored — your secrets stay local.
+
+### 8. Run with the production config (requires DataDog)
+
+```bash
+make run
+```
+
+`make run` automatically loads variables from `.env` if the file exists. You can also export them manually:
 
 ```bash
 export DD_API_KEY="your-datadog-api-key"
@@ -222,6 +244,7 @@ All custom attributes use the `claude.` prefix:
 ## Project Structure
 
 ```
+├── .env.example                     # Template for local environment variables
 ├── builder-config.yaml              # OTel Collector Builder manifest
 ├── Makefile                         # Build, test, run targets
 ├── Dockerfile                       # Multi-stage container build

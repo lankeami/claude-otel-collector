@@ -1,6 +1,7 @@
 .PHONY: help install-ocb generate build test run clean
 
 OCB_VERSION := 0.115.0
+GOPATH := $(shell go env GOPATH)
 OCB := $(shell which ocb 2>/dev/null || echo $(GOPATH)/bin/ocb)
 
 help: ## Show this help
@@ -23,6 +24,7 @@ test: ## Run all tests
 	go test ./internal/claudeprocessor/... ./internal/contentfilter/... -v -race
 
 run: build ## Run the collector with local config
+	@if [ -f .env ]; then set -a && . ./.env && set +a; fi && \
 	./bin/claude-otel-collector --config config/collector-config.yaml
 
 clean: ## Remove build artifacts

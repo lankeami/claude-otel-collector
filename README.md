@@ -88,7 +88,7 @@ The test config uses only the `debug` exporter, so you can run locally without a
 The collector is now listening on:
 - **gRPC:** `localhost:4317`
 - **HTTP:** `localhost:4318`
-- **Health check:** `localhost:13133`
+- **Health check:** `localhost:13133/ping`
 
 ### 6. Send a test trace
 

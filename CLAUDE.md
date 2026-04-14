@@ -81,7 +81,7 @@ All custom attributes use the `claude.` prefix:
 
 Helm chart at `deploy/helm/claude-otel-collector/`:
 - 2 replicas default, ClusterIP service
-- Ports: 4317 (gRPC), 4318 (HTTP), 13133 (health check)
+- Ports: 4317 (gRPC), 4318 (HTTP), 13133 (health check at `/ping`)
 - Requires `DD_API_KEY` secret
 - Pricing and team mappings configured via Helm values
 

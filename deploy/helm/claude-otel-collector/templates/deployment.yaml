@@ -40,13 +40,13 @@ spec:
               readOnly: true
           livenessProbe:
             httpGet:
-              path: /
+              path: /ping
               port: health
             initialDelaySeconds: 5
             periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: /
+              path: /ping
               port: health
             initialDelaySeconds: 5
             periodSeconds: 10

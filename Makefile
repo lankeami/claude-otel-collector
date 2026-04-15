@@ -1,4 +1,4 @@
-.PHONY: help install-ocb generate build test run clean
+.PHONY: help install-ocb generate build test run docker-build docker-run clean
 
 OCB_VERSION := 0.115.0
 GOPATH := $(shell go env GOPATH)
@@ -26,6 +26,12 @@ test: ## Run all tests
 run: build ## Run the collector with local config
 	@if [ -f .env ]; then set -a && . ./.env && set +a; fi && \
 	./bin/claude-otel-collector --config config/collector-config.yaml
+
+docker-build: ## Build Docker image
+	docker build -t claude-otel-collector .
+
+docker-run: docker-build ## Run collector in Docker with .env file (Datadog export)
+	docker run --rm --env-file .env -p 4317:4317 -p 4318:4318 -p 13133:13133 claude-otel-collector
 
 clean: ## Remove build artifacts
 	rm -rf bin/ cmd/collector/

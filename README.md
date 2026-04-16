@@ -154,21 +154,74 @@ export DD_API_KEY="your-datadog-api-key"
 make run
 ```
 
-## Docker
+## Running the Production Container Locally
 
-Build and run as a container:
+### 1. Build the Docker image
 
 ```bash
-# Build
-docker build -t claude-otel-collector .
+make docker-build
+```
 
-# Run with test config (debug exporter only)
-docker run -p 4317:4317 -p 4318:4318 -p 13133:13133 \
-  claude-otel-collector --config /etc/otel/config.yaml
+### 2. Create your `.env` file
 
-# Run with DataDog
-docker run -p 4317:4317 -p 4318:4318 -p 13133:13133 \
-  -e DD_API_KEY="your-key" \
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and set your DataDog API key:
+
+```
+DD_API_KEY=your-datadog-api-key
+```
+
+### 3. Start the collector
+
+```bash
+make docker-run
+```
+
+This builds the image (if needed) and runs the container with the production config, loading secrets from `.env`. The collector listens on:
+
+- **gRPC:** `localhost:4317`
+- **HTTP:** `localhost:4318`
+- **Health check:** `localhost:13133/ping`
+
+Verify it's running:
+
+```bash
+curl http://localhost:13133/ping
+```
+
+### 4. Point Claude Code at the collector
+
+Add the following to your Claude Code settings (`~/.claude/settings.json`):
+
+```json
+{
+  "env": {
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "http://localhost:4318",
+    "OTEL_TRACES_EXPORTER": "otlp"
+  }
+}
+```
+
+Or export the variables in your shell before launching Claude Code:
+
+```bash
+export OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4318"
+export OTEL_TRACES_EXPORTER="otlp"
+claude
+```
+
+Claude Code will now send OpenTelemetry traces to your local collector, which enriches them with cost and team data before forwarding to DataDog.
+
+### Running without DataDog
+
+To run the container with the test config (debug exporter only, no DataDog key required), mount the test config into the container:
+
+```bash
+docker run --rm -p 4317:4317 -p 4318:4318 -p 13133:13133 \
+  -v "$(pwd)/config/test-config.yaml:/etc/otel/config.yaml" \
   claude-otel-collector
 ```
 
@@ -273,6 +326,8 @@ All custom attributes use the `claude.` prefix:
 $ make help
 build                Build the collector binary
 clean                Remove build artifacts
+docker-build         Build Docker image
+docker-run           Run collector in Docker with .env file (Datadog export)
 generate             Generate collector source from builder-config.yaml
 help                 Show this help
 install-ocb          Install OpenTelemetry Collector Builder

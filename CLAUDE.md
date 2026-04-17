@@ -89,3 +89,7 @@ Helm chart at `deploy/helm/claude-otel-collector/`:
 
 **V1 complete:** claudeprocessor, contentfilter, DataDog export, Helm chart, Docker build.
 **V2 planned:** claudereceiver (API polling), S3 exporter, chat/cowork session support. See `docs/superpowers/specs/` for design.
+
+## Telemetry Metrics Catalog
+
+See [`docs/superpowers/specs/2026-04-17-telemetry-metrics-catalog.md`](docs/superpowers/specs/2026-04-17-telemetry-metrics-catalog.md) for a comprehensive catalog of every metric, attribute, and data point available from Claude Code, Claude Chat, Claude Cowork, and the Anthropic Admin APIs — organized by privacy tier (Default → Tool Details → User Prompts → Tool Content → Raw API Bodies) with compliance mapping for SOC 2, GDPR/CCPA, and internal policy.

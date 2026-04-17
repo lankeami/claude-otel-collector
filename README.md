@@ -345,3 +345,7 @@ test                 Run all tests
 2. Add to `builder-config.yaml` under `processors`
 3. Add to the pipeline in `config/collector-config.yaml`
 4. Run `make build` to regenerate the collector
+
+## Telemetry Metrics Catalog
+
+See [`docs/superpowers/specs/2026-04-17-telemetry-metrics-catalog.md`](docs/superpowers/specs/2026-04-17-telemetry-metrics-catalog.md) for a comprehensive catalog of every metric, attribute, and data point available from Claude Code, Claude Chat, Claude Cowork, and the Anthropic Admin APIs — organized by privacy tier (Default → Tool Details → User Prompts → Tool Content → Raw API Bodies) with compliance mapping for SOC 2, GDPR/CCPA, and internal policy.

@@ -6,13 +6,17 @@ RUN apk add --no-cache make git sed
 RUN go install go.opentelemetry.io/collector/cmd/builder@v0.115.0 \
     && mv /go/bin/builder /go/bin/ocb
 
+ENV GOTMPDIR=/go/tmp
+RUN mkdir -p /go/tmp
+
 WORKDIR /src
 COPY . .
 
 # Generate collector source, patch module name, and build
 RUN ocb --config builder-config.yaml --skip-compilation \
     && sed -i 's|module go.opentelemetry.io/collector/cmd/builder|module github.com/jaychinthrajah/claude-otel-collector/cmd/collector|' cmd/collector/go.mod \
-    && cd cmd/collector && go build -o /claude-otel-collector .
+    && cd cmd/collector && go mod download \
+    && CGO_ENABLED=0 go build -o /claude-otel-collector .
 
 FROM alpine:3.20
 

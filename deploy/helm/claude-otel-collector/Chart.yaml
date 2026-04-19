@@ -1,6 +1,0 @@
-apiVersion: v2
-name: claude-otel-collector
-description: Custom OTel Collector for Claude telemetry
-type: application
-version: 0.1.0
-appVersion: "0.1.0"

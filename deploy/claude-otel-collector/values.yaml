@@ -42,7 +42,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 3000
+  port: 4318
 
 ingress:
   enabled: false
@@ -53,6 +53,16 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+
+livenessProbe:
+  httpGet:
+    path: /ping
+    port: health
+
+readinessProbe:
+  httpGet:
+    path: /ping
+    port: health
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
